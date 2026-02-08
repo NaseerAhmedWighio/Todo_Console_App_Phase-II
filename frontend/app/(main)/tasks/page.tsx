@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { apiClient } from '../../../lib/api';
-import { getCurrentUserId } from '../../../lib/auth';
+import { apiClient } from '../lib/api';
+import { getCurrentUserId } from '../lib/auth';
 import TaskCard from '../../../components/tasks/task-card';
 
 interface Task {

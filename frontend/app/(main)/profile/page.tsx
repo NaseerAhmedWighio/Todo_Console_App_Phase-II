@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { getSession } from '../../../lib/auth';
+import { getSession } from '../lib/auth';
 
 interface UserData {
   id: string;

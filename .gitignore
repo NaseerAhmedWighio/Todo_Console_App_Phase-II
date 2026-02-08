@@ -12,7 +12,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+/lib/  # Only ignore lib directory in root, not subdirectories like frontend/lib
 lib64/
 parts/
 sdist/

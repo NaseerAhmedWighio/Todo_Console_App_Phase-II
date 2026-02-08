@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { apiClient } from '../../../lib/api';
-import { getCurrentUserId } from '../../../lib/auth';
+import { apiClient } from '../../lib/api';
+import { getCurrentUserId } from '../../lib/auth';
 
 interface TaskFormProps {
   task?: {

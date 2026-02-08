@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { apiClient } from '../../../lib/api';
-import { getCurrentUserId } from '../../../lib/auth';
+import { apiClient } from '../../lib/api';
+import { getCurrentUserId } from '../../lib/auth';
 import TaskCard from './task-card';
 import SearchBar from './search-bar';
 import FilterControls from './filter-controls';
