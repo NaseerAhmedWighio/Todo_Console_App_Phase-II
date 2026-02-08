@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { apiClient, Task } from '../../../lib/api';
-import { getCurrentUserId } from '../../../lib/auth';
+import { apiClient, Task } from '../../../../lib/api';
+import { getCurrentUserId } from '../../../../lib/auth';
 import TaskCard from '../../../../components/tasks/task-card';
 
 export default function TaskDetailPage() {
