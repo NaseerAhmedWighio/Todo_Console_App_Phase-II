@@ -1,0 +1,1 @@
+Get-ChildItem -Path . -Force | Where-Object { $_.Name -eq ([char]32) } | Remove-Item -Force

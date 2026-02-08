@@ -1,0 +1,1 @@
+"""Core module for Todo App backend."""

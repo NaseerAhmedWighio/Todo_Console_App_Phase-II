@@ -1,0 +1,232 @@
+# Todo App Phase II - Full-Stack Web Application
+
+Welcome to the Todo App Phase II - a full-stack web application with modern UI/UX, secure authentication, and premium features.
+
+## 🚀 Features
+
+- **Secure Authentication**: JWT-based authentication with Better Auth integration
+- **Multi-User Support**: Each user has isolated data with no cross-user access
+- **Modern UI/UX**: Luxury SaaS dashboard design with animations and micro-interactions
+- **Task Management**: Create, read, update, delete, and toggle completion of tasks
+- **Search & Filter**: Find tasks by title and filter by completion status
+- **Responsive Design**: Works seamlessly on mobile, tablet, and desktop
+- **Premium Experience**: Smooth animations using Framer Motion
+
+## 🛠 Tech Stack
+
+### Frontend
+- **Next.js 16+** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **Better Auth** (JWT enabled)
+- **Framer Motion** (for animations)
+
+### Backend
+- **FastAPI** (Python)
+- **SQLModel ORM**
+- **Neon Serverless PostgreSQL**
+
+### Authentication
+- **Better Auth** (Frontend)
+- **JWT tokens**
+- **Shared secret via BETTER_AUTH_SECRET**
+
+## 🎨 Design System
+
+### Color Palette
+- **Primary**: Deep Charcoal / Jet Black (#0B0B0E)
+- **Secondary**: Soft Graphite / Dark Gray (#1A1A1F)
+- **Accent**: Royal Gold / Champagne (#C9A24D)
+- **Success**: Emerald Green
+- **Danger**: Soft Crimson
+- **Text**: Off-white (#F5F5F7)
+
+### UI/UX Features
+- Smooth hover effects (scale-105, soft glow)
+- Task completion animations
+- Loading skeletons
+- Page transitions
+- Responsive design
+
+## 📋 API Endpoints
+
+### Authentication Endpoints
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/login` - Login user
+- `POST /api/v1/auth/logout` - Logout user
+
+### Task Management Endpoints
+- `GET /api/v1/tasks/{user_id}/tasks` - Get all user tasks
+- `POST /api/v1/tasks/{user_id}/tasks` - Create new task for user
+- `GET /api/v1/tasks/{user_id}/tasks/{task_id}` - Get specific task
+- `PUT /api/v1/tasks/{user_id}/tasks/{task_id}` - Update task
+- `DELETE /api/v1/tasks/{user_id}/tasks/{task_id}` - Delete task
+- `PATCH /api/v1/tasks/{user_id}/tasks/{task_id}/complete` - Toggle completion status
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- Python 3.9+
+- uv package manager
+- npm
+- Git
+
+### Backend Setup
+1. Navigate to the backend directory:
+   ```bash
+   cd backend/
+   ```
+
+2. Install dependencies using uv:
+   ```bash
+   uv sync
+   ```
+
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+### Frontend Setup
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend/
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   cp .env.local.example .env.local
+   # Edit .env.local with your configuration
+   ```
+
+### Environment Configuration
+
+#### Backend Environment Variables
+```bash
+# Database configuration
+DATABASE_URL="postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/dbname?sslmode=require"
+
+# Authentication configuration
+BETTER_AUTH_SECRET="your-jwt-secret-key"
+BETTER_AUTH_URL="http://localhost:3000"  # Your frontend URL
+
+# Application settings
+API_HOST="0.0.0.0"
+API_PORT=8000
+DEBUG=False
+```
+
+#### Frontend Environment Variables
+```bash
+# Backend API configuration
+NEXT_PUBLIC_API_BASE_URL="http://localhost:8000"
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+
+# Authentication configuration
+BETTER_AUTH_SECRET="same-secret-as-backend"
+```
+
+## 🏃‍♂️ Running the Application
+
+### Start the Backend
+```bash
+cd backend/
+uv run python main.py
+```
+
+### Start the Frontend
+```bash
+cd frontend/
+npm run dev
+```
+
+### Access the Application
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- Backend API Documentation: http://localhost:8000/docs
+
+## 🧪 Testing
+
+### Backend Testing
+```bash
+# Run all tests
+uv run pytest
+
+# Run tests with coverage
+uv run pytest --cov=.
+```
+
+### Frontend Testing
+```bash
+# Run all tests
+npm run test
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## 🏗 Project Structure
+
+```
+backend/
+├── main.py                 # Application entry point
+├── models/                 # SQLModel database models
+├── schemas/                # Pydantic request/response schemas
+├── database/               # Database connection and session management
+├── api/                    # API route definitions
+│   └── v1/                 # API version 1 routes
+│       ├── auth.py         # Authentication endpoints
+│       └── tasks.py        # Task management endpoints
+├── core/                   # Core application configuration
+├── utils/                  # Utility functions
+└── tests/                  # Test files
+
+frontend/
+├── app/                    # Next.js App Router pages
+│   ├── (auth)/             # Authentication-related pages
+│   ├── (main)/             # Main application pages
+│   │   ├── dashboard/      # Dashboard page
+│   │   ├── tasks/          # Task management pages
+│   │   └── profile/        # User profile page
+│   ├── globals.css         # Global styles
+│   ├── layout.tsx          # Root layout
+│   └── page.tsx            # Homepage
+├── components/             # Reusable React components
+├── lib/                    # Utility functions and API clients
+└── types/                  # TypeScript type definitions
+```
+
+## 🛡 Security
+
+- All API requests require JWT authentication
+- User data isolation enforced at the API level
+- Passwords are properly hashed and salted
+- Session tokens have reasonable expiration times
+- Input validation prevents injection attacks
+- Authentication secrets stored securely as environment variables
+
+## 📈 Performance
+
+- API endpoints respond within 500ms under normal load
+- Frontend pages load within 2 seconds on average connection
+- Task list page handles 100+ tasks efficiently
+- Authentication operations complete within 2 seconds
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [contributing guidelines](CONTRIBUTING.md) for more information.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you have any questions or need assistance, please open an issue in the repository.

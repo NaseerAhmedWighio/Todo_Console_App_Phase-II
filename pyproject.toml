@@ -1,0 +1,81 @@
+[project]
+name = "todo-app-console"
+version = "0.1.0"
+description = "In-Memory Python Console App Todo Application with FastAPI server"
+authors = [
+    {name = "Developer", email = "developer@example.com"},
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.104.1",
+    "uvicorn>=0.24.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "pytest>=7.4.0",
+    "python-multipart>=0.0.6",
+    "pydantic-core>=2.41.5",
+    "slowapi>=0.1.9",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+todo-app = "src.main:main"
+
+[tool.uv]
+dev-dependencies = [
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ['E203', 'W503']  # To maintain Black compatibility
+exclude = ['.git', '__pycache__', 'build', 'dist', '.venv']
+per-file-ignores = [
+    '__init__.py:F401',  # Allow unused imports in __init__.py files
+]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+exclude = ['tests/*', 'venv/*', '.venv/*', 'src/main.py']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+]

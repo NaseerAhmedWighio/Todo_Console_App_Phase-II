@@ -1,0 +1,10 @@
+# Standard gitignore content
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Add the problematic file with special characters
+ 

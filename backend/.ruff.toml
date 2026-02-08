@@ -1,0 +1,31 @@
+# Generic Ruff configuration
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+    "SIM", # simplify
+    "ARG", # flake8-unused-arguments
+    "DTZ", # flake8-datetimez
+    "PD",  # pandas-vet
+    "PGH", # pygrep-hooks
+    "PIE", # flake8-pie
+    "PL",  # pylint
+    "PT",  # flake8-pytest-style
+    "PYI", # flake8-pyi
+    "RUF", # ruff-specific rules
+    "SLF", # flake8-self
+    "TCH", # flake8-type-checking
+    "TID", # tidy-imports
+    "TRY", # tryceratops
+    "FLY", # flynt
+]
+line-length = 88
+target-version = "py39"
+
+[lint.isort]
+known-first-party = ["backend"]
+known-third-party = ["fastapi", "sqlmodel", "uvicorn", "pydantic", "sqlalchemy", "pytest"]
