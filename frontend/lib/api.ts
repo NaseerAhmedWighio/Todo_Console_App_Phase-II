@@ -1,6 +1,16 @@
 /** API client for Todo App frontend */
 import { getSession } from './auth';
 
+export interface Task {
+  id: number;
+  title: string;
+  description: string | null;
+  completed: boolean;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   body?: any;
@@ -110,7 +120,7 @@ export class ApiClient {
   // This API client is for task operations only
 
   // Task methods - these should match the backend API which has /api/v1 prefix
-  async getTasks(userId: string) {
+  async getTasks(userId: string): Promise<Task[]> {
     return this.request(`/api/v1/tasks/${userId}/tasks`);
   }
 
@@ -121,7 +131,7 @@ export class ApiClient {
     });
   }
 
-  async getTask(userId: string, taskId: number) {
+  async getTask(userId: string, taskId: number): Promise<Task> {
     return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`);
   }
 

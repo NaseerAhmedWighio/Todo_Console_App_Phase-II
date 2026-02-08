@@ -35,7 +35,7 @@ export default function TaskList({ initialFilter = 'all' }: TaskListProps) {
       try {
         // Add a small delay to ensure session is established
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         const userId = await getCurrentUserId();
         if (!userId) {
           setError('User not authenticated');
@@ -55,7 +55,7 @@ export default function TaskList({ initialFilter = 'all' }: TaskListProps) {
     };
 
     loadTasks();
-  }, []);
+  }, [currentFilter, searchQuery]);
 
   const applyFiltersAndSearch = (tasksToFilter: Task[], filter: 'all' | 'completed' | 'pending', search: string) => {
     let result = [...tasksToFilter];

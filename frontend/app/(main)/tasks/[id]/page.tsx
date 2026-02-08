@@ -3,19 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { apiClient } from '../../../../lib/api';
+import { apiClient, Task } from '../../../../lib/api';
 import { getCurrentUserId } from '../../../../lib/auth';
 import TaskCard from '../../../../components/tasks/task-card';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  user_id: string;
-  created_at: string;
-  updated_at: string;
-}
 
 export default function TaskDetailPage() {
   const { id } = useParams<{ id: string }>();

@@ -3,19 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { apiClient } from '../../../lib/api';
+import { apiClient, Task } from '../../../lib/api';
 import { getCurrentUserId } from '../../../lib/auth';
 import TaskList from '../../../components/tasks/task-list';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  user_id: string;
-  created_at: string;
-  updated_at: string;
-}
 
 interface Stats {
   total: number;
@@ -86,7 +76,7 @@ export default function DashboardPage() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
             Welcome Back
           </h1>
-          <p className="text-gray-400 mt-2">Here's what's happening with your tasks today.</p>
+          <p className="text-gray-400 mt-2">Here&#39;s what&#39;s happening with your tasks today.</p>
         </motion.div>
 
         {/* Stats Grid */}
