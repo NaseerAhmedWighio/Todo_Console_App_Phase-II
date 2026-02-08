@@ -1,6 +1,5 @@
 /** Better Auth integration for Todo App frontend */
 import { createAuthClient } from 'better-auth/react';
-import { useAuthQuery } from 'better-auth/react';
 
 // Initialize Better Auth client to communicate with our backend API
 // The backend now has Better Auth compatible endpoints at /api/auth/*
@@ -72,25 +71,25 @@ export async function getSession(): Promise<SessionData | null> {
     if (session?.data) {
       // Check if Better Auth session is valid
       const now = new Date();
-      const expiresAt = new Date(session.data.expires || Date.now() + 30 * 60 * 1000);
-      
+      const expiresAt = new Date(session.data.expiresAt || Date.now() + 30 * 60 * 1000);
+
       if (now >= expiresAt) {
         // Session has expired
         console.log('Better Auth session expired'); // Debug log
         return null;
       }
-      
+
       // Update localStorage with fresh session data
       const sessionData = {
         user: {
-          id: session.data.data.user.id || 'unknown',
-          email: session.data.data.user.email || 'unknown',
-          name: session.data.data.user.name || 'User',
+          id: session.data.user?.id || 'unknown',
+          email: session.data.user?.email || 'unknown',
+          name: session.data.user?.name || 'User',
         },
-        token: session.data.data.token || '',
-        expires: session.data.data.expires || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        token: session.data.token || '',
+        expires: session.data.expiresAt || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
       };
-      
+
       if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
         try {
           localStorage.setItem('user_session', JSON.stringify(sessionData));
@@ -99,14 +98,14 @@ export async function getSession(): Promise<SessionData | null> {
           console.error('Error updating session in localStorage:', storageError);
         }
       }
-      
+
       return {
         user: {
-          id: session.data.data.user.id || 'unknown',
-          email: session.data.data.user.email || 'unknown',
-          name: session.data.data.user.name || 'User',
+          id: session.data.user?.id || 'unknown',
+          email: session.data.user?.email || 'unknown',
+          name: session.data.user?.name || 'User',
         },
-        token: session.data.data.token || session.data.data.user.id || '', // Use user ID as fallback token
+        token: session.data.token || session.data.user?.id || '', // Use user ID as fallback token
         expiresAt: expiresAt,
       };
     }
@@ -148,20 +147,20 @@ export async function loginUser(credentials: { email: string; password: string }
     } catch (sessionError) {
       console.error('Error getting Better Auth session:', sessionError);
     }
-    
+
     // Create session data to store in localStorage
     let sessionData = null;
-    
-    if (sessionResult?.data?.data) {
+
+    if (sessionResult?.data) {
       // Use data from Better Auth if available
       sessionData = {
         user: {
-          id: sessionResult.data.data.user.id || 'unknown',
-          email: sessionResult.data.data.user.email || credentials.email,
-          name: sessionResult.data.data.user.name || credentials.email.split('@')[0]
+          id: sessionResult.data.user?.id || 'unknown',
+          email: sessionResult.data.user?.email || credentials.email,
+          name: sessionResult.data.user?.name || credentials.email.split('@')[0]
         },
-        token: sessionResult.data.data.token || '',
-        expires: sessionResult.data.data.expires || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        token: sessionResult.data.token || '',
+        expires: sessionResult.data.expiresAt || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
       };
     } else {
       // If Better Auth session isn't ready, make a direct API call to get user data
@@ -173,13 +172,13 @@ export async function loginUser(credentials: { email: string; password: string }
             'Content-Type': 'application/json',
           },
         });
-        
+
         console.log('API response status:', response.status); // Debug log
-        
+
         if (response.ok) {
           const userData = await response.json();
           console.log('User data received:', userData); // Debug log
-          
+
           sessionData = {
             user: {
               id: userData.id || userData.user_id || userData.sub || 'unknown',
@@ -323,12 +322,12 @@ export async function isAuthenticated(): Promise<boolean> {
     // If that fails, try to directly check with Better Auth client
     try {
       const authStatus = await authClient.getSession();
-      if (authStatus?.data?.data) {
+      if (authStatus?.data) {
         // Update localStorage with fresh session data if available
         const sessionData = {
-          user: authStatus.data.data.user,
-          token: authStatus.data.data.token,
-          expires: authStatus.data.data.expires
+          user: authStatus.data.user,
+          token: authStatus.data.token,
+          expires: authStatus.data.expiresAt
         };
         if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
           try {
