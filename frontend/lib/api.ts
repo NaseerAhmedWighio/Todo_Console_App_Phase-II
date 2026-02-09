@@ -97,37 +97,37 @@ export class ApiClient {
   // Authentication methods - these should use the auth.ts functions instead
   // This API client is for task operations only
 
-  // Task methods - these should match the backend API structure
+  // Task methods - these should match the backend API structure based on documentation
   async getTasks(userId: string): Promise<Task[]> {
-    return this.request(`/api/v1/notes/${userId}/notes`);
+    return this.request(`/api/v1/tasks/${userId}/tasks`);
   }
 
   async createTask(userId: string, taskData: { title: string; description?: string; completed?: boolean }) {
-    return this.request(`/api/v1/notes/${userId}/notes`, {
+    return this.request(`/api/v1/tasks/${userId}/tasks`, {
       method: 'POST',
       body: taskData,
     });
   }
 
   async getTask(userId: string, taskId: number): Promise<Task> {
-    return this.request(`/api/v1/notes/${userId}/notes/${taskId}`);
+    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`);
   }
 
   async updateTask(userId: string, taskId: number, taskData: { title: string; description?: string; completed: boolean }) {
-    return this.request(`/api/v1/notes/${userId}/notes/${taskId}`, {
+    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`, {
       method: 'PUT',
       body: taskData,
     });
   }
 
   async deleteTask(userId: string, taskId: number) {
-    return this.request(`/api/v1/notes/${userId}/notes/${taskId}`, {
+    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`, {
       method: 'DELETE',
     });
   }
 
   async toggleTaskCompletion(userId: string, taskId: number, completed: boolean) {
-    return this.request(`/api/v1/notes/${userId}/notes/${taskId}/complete`, {
+    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}/complete`, {
       method: 'PATCH',
       body: { completed },
     });
