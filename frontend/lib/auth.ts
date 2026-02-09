@@ -62,8 +62,9 @@ export async function getSession(): Promise<SessionData | null> {
 export async function loginUser(credentials: { email: string; password: string }): Promise<{ success: boolean; error?: string }> {
   try {
     // Use the correct API endpoint for login
-    const baseURL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'https://naseerahmed-todo-app-phase-2.hf.space').replace(/\/$/, '');
-    const response = await fetch(`${baseURL}/api/v1/auth/login`, {
+    const baseURL = (process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(/\/$/, '');
+    const fullUrl = baseURL ? `${baseURL}/api/v1/auth/login` : '/api/v1/auth/login';
+    const response = await fetch(fullUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -121,8 +122,9 @@ export async function loginUser(credentials: { email: string; password: string }
 export async function registerUser(userData: { email: string; password: string; name?: string }): Promise<{ success: boolean; error?: string }> {
   try {
     // Use the correct API endpoint for registration
-    const baseURL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'https://naseerahmed-todo-app-phase-2.hf.space').replace(/\/$/, '');
-    const response = await fetch(`${baseURL}/api/v1/auth/register`, {
+    const baseURL = (process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(/\/$/, '');
+    const fullUrl = baseURL ? `${baseURL}/api/v1/auth/register` : '/api/v1/auth/register';
+    const response = await fetch(fullUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -181,8 +183,9 @@ export async function registerUser(userData: { email: string; password: string; 
 export async function logoutUser(): Promise<boolean> {
   try {
     // Call the logout API endpoint
-    const baseURL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'https://naseerahmed-todo-app-phase-2.hf.space').replace(/\/$/, '');
-    const response = await fetch(`${baseURL}/api/v1/auth/logout`, {
+    const baseURL = (process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(/\/$/, '');
+    const fullUrl = baseURL ? `${baseURL}/api/v1/auth/logout` : '/api/v1/auth/logout';
+    const response = await fetch(fullUrl, {
       method: 'POST',
       credentials: 'include' // Include cookies in cross-origin requests
     });
