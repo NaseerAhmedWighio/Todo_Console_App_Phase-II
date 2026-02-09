@@ -40,18 +40,18 @@ export default function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
 
       if (task) {
         // Update existing task
-        await apiClient.updateTask(userId, task.id, {
+        await apiClient.updateTask(task.id, {
           title,
           description: description || undefined,
           completed,
-        });
+        }, userId);
       } else {
         // Create new task
-        await apiClient.createTask(userId, {
+        await apiClient.createTask({
           title,
           description: description || undefined,
           completed,
-        });
+        }, userId);
       }
 
       if (onSuccess) {

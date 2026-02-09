@@ -98,39 +98,76 @@ export class ApiClient {
   // This API client is for task operations only
 
   // Task methods - these should match the backend API structure based on documentation
-  async getTasks(userId: string): Promise<Task[]> {
-    return this.request(`/api/v1/tasks/${userId}/tasks`);
+  async getTasks(userId?: string): Promise<Task[]> {
+    const actualUserId = userId || await this.getCurrentUserId();
+    if (!actualUserId) {
+      throw new Error('User not authenticated');
+    }
+    return this.request(`/api/v1/tasks/${actualUserId}/tasks`);
   }
 
-  async createTask(userId: string, taskData: { title: string; description?: string; completed?: boolean }) {
-    return this.request(`/api/v1/tasks/${userId}/tasks`, {
+  async createTask(taskData: { title: string; description?: string; completed?: boolean }, userId?: string) {
+    const actualUserId = userId || await this.getCurrentUserId();
+    if (!actualUserId) {
+      throw new Error('User not authenticated');
+    }
+    return this.request(`/api/v1/tasks/${actualUserId}/tasks`, {
       method: 'POST',
       body: taskData,
     });
   }
 
-  async getTask(userId: string, taskId: number): Promise<Task> {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`);
+  async getTask(taskId: number, userId?: string): Promise<Task> {
+    const actualUserId = userId || await this.getCurrentUserId();
+    if (!actualUserId) {
+      throw new Error('User not authenticated');
+    }
+    return this.request(`/api/v1/tasks/${actualUserId}/tasks/${taskId}`);
   }
 
-  async updateTask(userId: string, taskId: number, taskData: { title: string; description?: string; completed: boolean }) {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`, {
+  async updateTask(taskId: number, taskData: { title: string; description?: string; completed: boolean }, userId?: string) {
+    const actualUserId = userId || await this.getCurrentUserId();
+    if (!actualUserId) {
+      throw new Error('User not authenticated');
+    }
+    return this.request(`/api/v1/tasks/${actualUserId}/tasks/${taskId}`, {
       method: 'PUT',
       body: taskData,
     });
   }
 
-  async deleteTask(userId: string, taskId: number) {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`, {
+  async deleteTask(taskId: number, userId?: string) {
+    const actualUserId = userId || await this.getCurrentUserId();
+    if (!actualUserId) {
+      throw new Error('User not authenticated');
+    }
+    return this.request(`/api/v1/tasks/${actualUserId}/tasks/${taskId}`, {
       method: 'DELETE',
     });
   }
 
-  async toggleTaskCompletion(userId: string, taskId: number, completed: boolean) {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}/complete`, {
+  async toggleTaskCompletion(taskId: number, completed: boolean, userId?: string) {
+    const actualUserId = userId || await this.getCurrentUserId();
+    if (!actualUserId) {
+      throw new Error('User not authenticated');
+    }
+    return this.request(`/api/v1/tasks/${actualUserId}/tasks/${taskId}/complete`, {
       method: 'PATCH',
       body: { completed },
     });
+  }
+
+  private async getCurrentUserId(): Promise<string | null> {
+    try {
+      const storedSession = typeof window !== 'undefined' ? localStorage.getItem('user_session') : null;
+      if (storedSession) {
+        const parsedSession = JSON.parse(storedSession);
+        return parsedSession.user?.id || null;
+      }
+    } catch (error) {
+      console.error('Error getting current user ID:', error);
+    }
+    return null;
   }
 }
 

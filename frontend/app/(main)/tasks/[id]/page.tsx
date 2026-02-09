@@ -22,7 +22,7 @@ export default function TaskDetailPage() {
 
         if (userId && id) {
           // Use the user ID to get the task by its ID
-          const taskDetails = await apiClient.getTask(userId, parseInt(id));
+          const taskDetails = await apiClient.getTask(parseInt(id), userId);
           setTask(taskDetails);
         } else {
           // If we don't have the user ID, redirect to login
@@ -102,7 +102,7 @@ export default function TaskDetailPage() {
             onClick={async () => {
               if (window.confirm('Are you sure you want to delete this task?')) {
                 try {
-                  await apiClient.deleteTask(task.user_id, task.id);
+                  await apiClient.deleteTask(task.id, task.user_id);
                   router.push('/tasks');
                 } catch (error) {
                   console.error('Error deleting task:', error);

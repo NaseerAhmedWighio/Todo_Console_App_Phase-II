@@ -24,7 +24,7 @@ export default function TaskCheckbox({ taskId, completed, onToggle }: TaskCheckb
       setIsChecked(newCompletedState);
 
       // Update on server
-      await apiClient.toggleTaskCompletion(userId, taskId, newCompletedState);
+      await apiClient.toggleTaskCompletion(taskId, newCompletedState, userId);
 
       // Call callback if provided
       if (onToggle) {

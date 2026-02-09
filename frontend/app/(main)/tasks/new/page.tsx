@@ -29,11 +29,11 @@ export default function CreateTaskPage() {
         return;
       }
 
-      await apiClient.createTask(userId, {
+      await apiClient.createTask({
         title,
         description: description || undefined,
         completed: false,
-      });
+      }, userId);
 
       router.push('/tasks');
       router.refresh();
