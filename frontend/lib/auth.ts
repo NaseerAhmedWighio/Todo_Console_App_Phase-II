@@ -83,10 +83,26 @@ export async function loginUser(credentials: { email: string; password: string }
 
     const result = await response.json();
     
+    // Extract user ID from JWT token if not available in response
+    let userId = result.user_id || result.id || result.sub || 'unknown';
+    
+    if (userId === 'unknown' && result.access_token) {
+      try {
+        // Decode JWT token to extract user ID from the payload
+        const tokenParts = result.access_token.split('.');
+        if (tokenParts.length === 3) {
+          const payload = JSON.parse(atob(tokenParts[1]));
+          userId = payload.sub || payload.user_id || payload.id || 'unknown';
+        }
+      } catch (decodeError) {
+        console.error('Error decoding JWT token:', decodeError);
+      }
+    }
+    
     // Create session data to store in localStorage
     const sessionData = {
       user: {
-        id: result.user_id || result.id || result.sub || 'unknown',
+        id: userId,
         email: result.email || result.user_email || credentials.email,
         name: result.name || result.user_name || credentials.email.split('@')[0] || 'User'
       },
@@ -144,10 +160,26 @@ export async function registerUser(userData: { email: string; password: string; 
 
     const result = await response.json();
     
+    // Extract user ID from JWT token if not available in response
+    let userId = result.user_id || result.id || result.sub || 'unknown';
+    
+    if (userId === 'unknown' && result.access_token) {
+      try {
+        // Decode JWT token to extract user ID from the payload
+        const tokenParts = result.access_token.split('.');
+        if (tokenParts.length === 3) {
+          const payload = JSON.parse(atob(tokenParts[1]));
+          userId = payload.sub || payload.user_id || payload.id || 'unknown';
+        }
+      } catch (decodeError) {
+        console.error('Error decoding JWT token:', decodeError);
+      }
+    }
+    
     // Create session data to store in localStorage
     const sessionData = {
       user: {
-        id: result.user_id || result.id || result.sub || 'unknown',
+        id: userId,
         email: result.email || result.user_email || userData.email,
         name: result.name || result.user_name || userData.name || userData.email.split('@')[0] || 'User'
       },
