@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { apiClient, Task } from '../../../lib/api';
-import { getCurrentUserId } from '../../../lib/auth';
-import TaskList from '../../../components/tasks/task-list';
+import { useAuth } from '../../../components/auth/AuthProvider';
+import { useRouter } from 'next/navigation';
 
 interface Stats {
   total: number;
@@ -17,14 +17,22 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({ total: 0, completed: 0, pending: 0 });
   const [recentTasks, setRecentTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // If user is not authenticated, redirect to login
+    if (!authLoading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [authLoading, isAuthenticated, router]);
 
   useEffect(() => {
     const loadDashboardData = async () => {
+      if (!user?.id) return; // Wait for user to be available
+      
       try {
-        const userId = await getCurrentUserId();
-        if (!userId) return;
-
-        const tasks = await apiClient.getTasks(userId);
+        const tasks = await apiClient.getTasks(user.id);
 
         // Calculate stats
         const completed = tasks.filter(t => t.completed).length;
@@ -49,10 +57,12 @@ export default function DashboardPage() {
       }
     };
 
-    loadDashboardData();
-  }, []);
+    if (user?.id) {
+      loadDashboardData();
+    }
+  }, [user?.id]);
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
         <motion.div

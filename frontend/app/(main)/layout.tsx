@@ -136,26 +136,25 @@
 
 'use client';
 
-import { useAuth } from "@/components/auth/AuthProvider"; // or wherever AuthProvider is
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-// ... motion etc.
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
-    }
-  }, [isLoading, isAuthenticated, router]);
-
+  // Since AuthProvider already handles routing, we just need to render children
+  // or a loading state. No additional redirects needed here.
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+        <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
-  if (!isAuthenticated) return null;
-
+  // If user is not authenticated, the AuthProvider will handle redirect
+  // So we just return the children here
   return <div className="min-h-screen">{children}</div>;
 }

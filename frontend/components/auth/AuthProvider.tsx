@@ -384,17 +384,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Route protection
+  // Route protection - only redirect once after auth state is loaded
   useEffect(() => {
     if (isLoading) return;
 
     const isPublic = PUBLIC_ROUTES.includes(pathname);
-
+    
+    // Only redirect if auth state has been initialized
     if (!isAuthenticatedState && !isPublic) {
       console.log(`❌ No session - Protecting ${pathname} → /login`);
+      // Use replace to avoid back button issues
       router.replace('/login');
     } else if (isAuthenticatedState && (pathname === '/login' || pathname === '/register')) {
       console.log(`✅ Auth user on auth page → /dashboard`);
+      // Use replace to avoid back button issues
       router.replace('/dashboard');
     }
   }, [isAuthenticatedState, isLoading, pathname, router]);

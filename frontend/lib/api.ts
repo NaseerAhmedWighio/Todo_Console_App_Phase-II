@@ -22,7 +22,7 @@ export class ApiClient {
 
   constructor() {
     // Use the backend API URL for task operations
-    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://naseerahmed-todo-app-phase-2.hf.space';
   }
 
   private async request<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
@@ -32,8 +32,15 @@ export class ApiClient {
     const token = await this.getAuthToken();
     const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
 
-    // Construct the full URL
-    const url = `${this.baseUrl}${endpoint}`;
+    // Construct the full URL, ensuring no double slashes
+    let cleanBaseUrl = this.baseUrl.endsWith('/') ? this.baseUrl.slice(0, -1) : this.baseUrl;
+    let cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const url = `${cleanBaseUrl}${cleanEndpoint}`;
+
+    // Log the URL being called for debugging
+    console.log(`Making API request: ${method} ${url}`);
+    console.log(`Auth token present: ${!!token}`);
+    console.log(`User ID in URL: ${endpoint.includes('/tasks/') ? endpoint.split('/tasks/')[1].split('/')[0] : 'N/A'}`);
 
     // Prepare request options
     const requestOptions: RequestInit = {
@@ -54,7 +61,9 @@ export class ApiClient {
 
       // Handle different status codes
       if (!response.ok) {
+        console.error(`API request failed with status ${response.status}: ${method} ${url}`);
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        console.error('Error response:', errorData);
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
@@ -79,11 +88,6 @@ export class ApiClient {
           const parsedSession = JSON.parse(storedSession);
           if (parsedSession.token) {
             return parsedSession.token;
-          }
-          // If no token in stored session, try to get from user data
-          if (parsedSession.user?.id) {
-            // Return the user ID as a fallback token if needed
-            return parsedSession.user.id;
           }
         }
       } catch (parseError) {
