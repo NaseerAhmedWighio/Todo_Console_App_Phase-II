@@ -99,35 +99,35 @@ export class ApiClient {
 
   // Task methods - these should match the backend API structure
   async getTasks(userId: string): Promise<Task[]> {
-    return this.request(`/api/v1/tasks/${userId}/tasks`);
+    return this.request(`/api/v1/notes/${userId}/notes`);
   }
 
   async createTask(userId: string, taskData: { title: string; description?: string; completed?: boolean }) {
-    return this.request(`/api/v1/tasks/${userId}/tasks`, {
+    return this.request(`/api/v1/notes/${userId}/notes`, {
       method: 'POST',
       body: taskData,
     });
   }
 
   async getTask(userId: string, taskId: number): Promise<Task> {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`);
+    return this.request(`/api/v1/notes/${userId}/notes/${taskId}`);
   }
 
   async updateTask(userId: string, taskId: number, taskData: { title: string; description?: string; completed: boolean }) {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`, {
+    return this.request(`/api/v1/notes/${userId}/notes/${taskId}`, {
       method: 'PUT',
       body: taskData,
     });
   }
 
   async deleteTask(userId: string, taskId: number) {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}`, {
+    return this.request(`/api/v1/notes/${userId}/notes/${taskId}`, {
       method: 'DELETE',
     });
   }
 
   async toggleTaskCompletion(userId: string, taskId: number, completed: boolean) {
-    return this.request(`/api/v1/tasks/${userId}/tasks/${taskId}/complete`, {
+    return this.request(`/api/v1/notes/${userId}/notes/${taskId}/complete`, {
       method: 'PATCH',
       body: { completed },
     });

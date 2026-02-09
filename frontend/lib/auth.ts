@@ -86,12 +86,12 @@ export async function loginUser(credentials: { email: string; password: string }
     // Create session data to store in localStorage
     const sessionData = {
       user: {
-        id: result.user_id || result.id || 'unknown',
-        email: result.email || credentials.email,
-        name: result.name || credentials.email.split('@')[0] || 'User'
+        id: result.user_id || result.id || result.sub || 'unknown',
+        email: result.email || result.user_email || credentials.email,
+        name: result.name || result.user_name || credentials.email.split('@')[0] || 'User'
       },
-      token: result.access_token || result.token || '',
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+      token: result.access_token || result.token || result.jwt || '',
+      expires: new Date((result.expires_at || result.exp || Date.now() + 24 * 60 * 60 * 1000)).toISOString() // 24 hours
     };
 
     // Store the session data in localStorage
@@ -147,12 +147,12 @@ export async function registerUser(userData: { email: string; password: string; 
     // Create session data to store in localStorage
     const sessionData = {
       user: {
-        id: result.user_id || result.id || 'unknown',
-        email: result.email || userData.email,
-        name: result.name || userData.name || userData.email.split('@')[0] || 'User'
+        id: result.user_id || result.id || result.sub || 'unknown',
+        email: result.email || result.user_email || userData.email,
+        name: result.name || result.user_name || userData.name || userData.email.split('@')[0] || 'User'
       },
-      token: result.access_token || result.token || '',
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+      token: result.access_token || result.token || result.jwt || '',
+      expires: new Date((result.expires_at || result.exp || Date.now() + 24 * 60 * 60 * 1000)).toISOString() // 24 hours
     };
 
     // Store the session data in localStorage
