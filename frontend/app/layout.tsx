@@ -22,7 +22,7 @@ export default function RootLayout({
             <header className="sticky top-0 z-10 bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
               <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                 <Link
-                  href="/"
+                  href="/dashboard"
                   className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
                 >
                   Todo App

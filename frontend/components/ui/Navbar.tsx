@@ -36,7 +36,7 @@ export default function Navbar() {
                 Dashboard
               </Link>
               <Link 
-                href="/todos" 
+                href="/dashboard" 
                 className="text-[#A0A0A5] hover:text-[#F5F5F7] transition-colors font-medium"
               >
                 Todos
