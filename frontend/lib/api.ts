@@ -97,7 +97,7 @@ export class ApiClient {
   // Authentication methods - these should use the auth.ts functions instead
   // This API client is for task operations only
 
-  // Task methods - these should match the backend API which has /api/v1 prefix
+  // Task methods - these should match the backend API structure
   async getTasks(userId: string): Promise<Task[]> {
     return this.request(`/api/v1/tasks/${userId}/tasks`);
   }
