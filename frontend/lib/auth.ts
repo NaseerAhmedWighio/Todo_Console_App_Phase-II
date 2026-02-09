@@ -71,7 +71,9 @@ export async function getSession(): Promise<SessionData | null> {
     if (session?.data) {
       // Check if Better Auth session is valid
       const now = new Date();
-      const expiresAt = new Date(session.data.expiresAt || Date.now() + 30 * 60 * 1000);
+      // Better Auth session structure has session.expiresAt inside the session object
+      const sessionExpiresAt = session.data.session?.expiresAt;
+      const expiresAt = new Date(sessionExpiresAt || Date.now() + 30 * 60 * 1000);
 
       if (now >= expiresAt) {
         // Session has expired
@@ -82,12 +84,12 @@ export async function getSession(): Promise<SessionData | null> {
       // Update localStorage with fresh session data
       const sessionData = {
         user: {
-          id: session.data.user?.id || 'unknown',
+          id: session.data.user?.id || session.data.session?.userId || 'unknown',
           email: session.data.user?.email || 'unknown',
           name: session.data.user?.name || 'User',
         },
-        token: session.data.token || '',
-        expires: session.data.expiresAt || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        token: session.data.session?.id || '',
+        expires: sessionExpiresAt || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
       };
 
       if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
@@ -105,7 +107,7 @@ export async function getSession(): Promise<SessionData | null> {
           email: session.data.user?.email || 'unknown',
           name: session.data.user?.name || 'User',
         },
-        token: session.data.token || session.data.user?.id || '', // Use user ID as fallback token
+        token: session.data.session?.id || session.data.user?.id || '', // Use user ID as fallback token
         expiresAt: expiresAt,
       };
     }
@@ -121,10 +123,9 @@ export async function getSession(): Promise<SessionData | null> {
  */
 export async function loginUser(credentials: { email: string; password: string }): Promise<{ success: boolean; error?: string }> {
   try {
-    const result = await authClient.signIn.credentials({
+    const result = await authClient.signIn.email({
       email: credentials.email,
       password: credentials.password,
-      redirect: false,
     });
 
     if (result.error) {
@@ -249,7 +250,6 @@ export async function registerUser(userData: { email: string; password: string; 
       email: userData.email,
       password: userData.password,
       name: userData.name || userData.email.split('@')[0],
-      redirect: false,
     });
 
     if (result.error) {
@@ -326,8 +326,8 @@ export async function isAuthenticated(): Promise<boolean> {
         // Update localStorage with fresh session data if available
         const sessionData = {
           user: authStatus.data.user,
-          token: authStatus.data.token,
-          expires: authStatus.data.expiresAt
+          token: authStatus.data.session?.id || '',
+          expires: authStatus.data.session?.expiresAt
         };
         if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
           try {

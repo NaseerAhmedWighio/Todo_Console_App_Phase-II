@@ -95,8 +95,11 @@ export class ApiClient {
     try {
       const { authClient } = await import('./auth');
       const authSession = await authClient.getSession();
-      if (authSession?.data?.token) {
-        return authSession.data.token;
+      if (authSession?.data) {
+        // Better Auth typically stores session tokens in cookies, not in the returned data
+        // The session data contains user info but not necessarily a separate token
+        // Return the user ID as a fallback or handle as needed
+        return authSession.data.user?.id || null;
       }
     } catch (error) {
       console.error('Error getting auth token from Better Auth client:', error);

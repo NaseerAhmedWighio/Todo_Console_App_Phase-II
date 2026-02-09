@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
-import { ButtonHTMLAttributes, AnchorHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+// Define a more flexible type that works with both button and link scenarios
+interface ButtonProps extends Partial<ButtonHTMLAttributes<HTMLButtonElement>> {
   variant?: 'primary' | 'secondary' | 'accent' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   asLink?: boolean;
   href?: string;
+  children: ReactNode;
 }
 
 export default function Button({
@@ -37,13 +39,40 @@ export default function Button({
   const classes = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
 
   if (asLink && href) {
+    // Extract only the compatible props for motion.a to avoid type conflicts
+    const { 
+      onClick, 
+      onKeyDown, 
+      onMouseDown, 
+      onMouseUp, 
+      onMouseEnter, 
+      onMouseLeave, 
+      onTouchStart, 
+      onTouchEnd, 
+      onDrag, 
+      onDragStart, 
+      onDragEnd,
+      ...otherProps 
+    } = props;
+    
     return (
       <motion.a
         href={href}
         className={classes}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.98 }}
-        {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+        // Type assertion to handle the event handler type mismatch
+        {...{
+          onClick,
+          onKeyDown,
+          onMouseDown,
+          onMouseUp,
+          onMouseEnter,
+          onMouseLeave,
+          onTouchStart,
+          onTouchEnd,
+          ...otherProps
+        } as any}
       >
         {isLoading ? (
           <motion.span
@@ -57,13 +86,40 @@ export default function Button({
     );
   }
 
+  // Handle the motion.button props in the same way to avoid type conflicts
+  const { 
+    onClick, 
+    onKeyDown, 
+    onMouseDown, 
+    onMouseUp, 
+    onMouseEnter, 
+    onMouseLeave, 
+    onTouchStart, 
+    onTouchEnd, 
+    onDrag, 
+    onDragStart, 
+    onDragEnd,
+    ...otherProps 
+  } = props;
+
   return (
     <motion.button
       className={classes}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.98 }}
       disabled={isLoading}
-      {...props}
+      // Type assertion to handle the event handler type mismatch
+      {...{
+        onClick,
+        onKeyDown,
+        onMouseDown,
+        onMouseUp,
+        onMouseEnter,
+        onMouseLeave,
+        onTouchStart,
+        onTouchEnd,
+        ...otherProps
+      } as any}
     >
       {isLoading ? (
         <motion.span
