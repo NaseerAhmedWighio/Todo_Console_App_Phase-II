@@ -225,7 +225,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { authClient, loginUser, getSession, isAuthenticated as checkIsAuthenticated, logoutUser } from '@/lib/auth';
+import { loginUser, getSession, isAuthenticated as checkIsAuthenticated, logoutUser } from '@/lib/auth';
 
 interface User {
   id: string;
