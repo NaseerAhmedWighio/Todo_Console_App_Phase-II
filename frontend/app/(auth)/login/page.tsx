@@ -32,9 +32,8 @@ export default function LoginPage() {
     // Wait a bit to ensure session is properly established before redirecting
     await new Promise(resolve => setTimeout(resolve, 500));
     // ✅ Session is already stored by loginUser
-    router.replace('/dashboard');
-    // Refresh to ensure the UI updates with the new session
-    router.refresh();
+    // The AuthProvider will automatically redirect to dashboard since user is now authenticated
+    // No need for manual redirect here
   };
 
   return (
